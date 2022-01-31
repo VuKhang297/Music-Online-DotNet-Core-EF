@@ -1,0 +1,57 @@
+﻿@page
+@using MusicOnline.DTO
+@using System.Text.Json
+@model MusicOnline.Pages.PlaylistModel
+@{
+    ViewData["Title"] = "Playlist";
+}
+
+@Html.AntiForgeryToken()
+<script type="text/javascript">
+    var dataPla = @Html.Raw(JsonSerializer.Serialize(Model.lst));
+</script>
+<script src="~/js/playlist.js"></script>
+<div class="text-center">
+    <h1 class="display-4">Thể loại nhạc. <button type="button" class="btn btn-outline-success" onclick="openPlaylistModal(null);">Tạo playlist</button></h1>
+    <table id="tblPlaylist" class="table table-danger">
+        <tr>
+            <th>Mã</th>
+            <th>Tên playlist</th>
+            <th>Action</th>
+        </tr>
+        @foreach (PlaylistDTO p in Model.lst)
+        {
+            <tr id="trPla_@p.id">
+                <td>@p.id</td>
+                <td>@p.name</td>
+                <td>
+                    <button type="button" class="btn btn-outline-primary btn-sm" onclick="openPlaylistModal(@p.id);">Sửa</button>
+                    <button type="button" class="btn btn-outline-danger btn-sm" onclick="deletePlaylist(@p.id);">Xóa</button>
+                </td>
+            </tr>
+        }
+    </table>
+</div>
+<div id="divModal" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Cập nhật thể loại - <span id="spanId"></span></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="exampleInputEmail1">Tên thể loại</label>
+                    <input type="email" class="form-control" id="txtPlaylistName" aria-describedby="PlaylistNameHelp" placeholder="Nhập tên playlist">
+                    <small id="PlaylistNameHelp" class="form-text text-muted">Tên playlist không được để trống.</small>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="savePlaylist();">Lưu thay đổi</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>

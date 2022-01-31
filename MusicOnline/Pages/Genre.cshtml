@@ -1,0 +1,57 @@
+﻿@page
+@using MusicOnline.DTO
+@using System.Text.Json
+@model MusicOnline.Pages.GenreModel
+@{
+    ViewData["Title"] = "Chủ đề";
+}
+<script src="~/js/genre.js"></script>
+@Html.AntiForgeryToken()
+<script type="text/javascript">
+    var dataGen = @Html.Raw(JsonSerializer.Serialize(Model.lst));
+</script>
+
+<div class="text-center">
+    <h1 class="display-4">Chủ đề. <button type="button" class="btn btn-outline-success" onclick="openModal(null)">Thêm mới thể loại</button></h1>
+    <table id="tblGenre" class="table table-danger">
+        <tr>
+            <th>Mã chủ đề</th>
+            <th>Tên chủ đề</th>
+            <th>Action</th>
+        </tr>
+        @foreach(GenreDTO g in Model.lst)
+            {
+                <tr id="trGen_@g.id">
+                    <td>@g.id</td>
+                    <td>@g.name</td>
+                    <td>
+                        <button type="button" class="btn btn-outline-primary btn-sm" onclick="openModal(@g.id);">Sửa</button>
+                        <button type="button" class="btn btn-outline-danger btn-sm" onclick="deleteGenre(@g.id);">Xóa</button>
+                    </td>
+                </tr>
+            }
+    </table>
+</div>
+<div id="divModal" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Cập nhật chủ đề - <span id="spanId"></span></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="exampleInputEmail1">Tên chủ đề</label>
+                    <input type="email" class="form-control" id="txtGenreName" aria-describedby="genreNameHelp" placeholder="Nhập tên chủ đề">
+                    <small id="genreNameHelp" class="form-text text-muted">Tên chủ đề không được để trống.</small>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="saveGenre();">Lưu thay đổi</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>

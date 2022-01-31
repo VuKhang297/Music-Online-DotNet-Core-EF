@@ -1,0 +1,60 @@
+﻿@page
+@using MusicOnline.DTO
+@using System.Text.Json
+@model MusicOnline.Pages.ArtistModel
+@{
+    ViewData["Title"] = "Nghệ sĩ";
+}
+<script src="~/js/artist.js"></script>
+@Html.AntiForgeryToken()
+<script type="text/javascript">
+    var dataArt = @Html.Raw(JsonSerializer.Serialize(Model.lst));
+</script>
+<div class="text-center">
+    <h1 class="display-4">Nghệ sĩ. <button type="button" class="btn btn-outline-success" onclick="openModal(null);">Thêm mới nghệ sĩ</button></h1>
+    <table id="tblArtist" class="table table-danger">
+        <tr>
+            <th>Mã nghệ sĩ</th>
+            <th>Tên nghệ sĩ</th>
+            <th>Profile</th>
+            <th>Action</th>
+        </tr>
+        @foreach (ArtistDTO a in Model.lst)
+        {
+    <tr id="trGen_@a.id">
+        <td>@a.id</td>
+        <td>@a.name</td>
+        <td>@a.profile</td>
+        <td>
+            <button type="button" class="btn btn-outline-primary btn-sm" onclick="openModal(@a.id);">Sửa</button>
+            <button type="button" class="btn btn-outline-danger btn-sm" onclick="deleteArtist(@a.id);">Xóa</button>
+        </td>
+    </tr>
+        }
+    </table>
+</div>
+<div id="divModal" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Cập nhật nghệ sĩ - <span id="spanId"></span></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="exampleInputEmail1">Tên nghệ sĩ</label>
+                    <input type="text" class="form-control" id="txtArtistName" aria-describedby="ArtistNameHelp" placeholder="Nhập tên nghệ sĩ">
+                    <label for="exampleInputEmail1">Profile</label>
+                    <input type="text" class="form-control" id="txtArtistProfile" aria-describedby="ArtistProfileHelp" placeholder="Nhập profile">
+                    <small id="ArtistNameHelp" class="form-text text-muted">Tên nghệ sĩ không được để trống.</small>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="saveArtist();">Lưu thay đổi</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
